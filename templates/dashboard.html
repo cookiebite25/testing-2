@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Smart Network Planner</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #0f0f1b;
+      /* background-image: url('/static/background.png'); */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* overlay for better readability */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 15, 27, 0.7); /* Dark overlay for contrast */
+      z-index: -1;
+    }
+
+
+    .animated-bg {
+      background: linear-gradient(-45deg, #0f0f1b, #1a1a2e, #16213e, #0f3460);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .floating-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .bg-dots {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(#9333ea 2px, transparent 2px),
+                  radial-gradient(#6d28d9 2px, transparent 2px);
+      background-size: 30px 30px;
+      opacity: 0.05;
+      pointer-events: none;
+    }
+
+    .navbar {
+      background: rgba(71, 6, 80, 0.95) !important;
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 1rem 2rem;
+      transition: all 0.3s ease;
+    } 
+    .navbar-scrolled {
+      background: rgba(15, 15, 27, 0.98) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Better brand styling */
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-link, .navbar-brand {
+      color: #ffffff !important;
+      font-weight: 500;
+    }
+
+    .register-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+      padding: 2rem;
+    }
+
+    .register-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .register-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .register-header h2 {
+      color: #ffffff;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .register-header p {
+      color: #cccccc;
+      opacity: 0.8;
+    }
+
+    .form-control {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 14px 16px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .form-control:focus {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      color: white;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-gradient::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-gradient:hover::before {
+      left: 100%;
+    }
+
+    .btn-gradient:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .form-control:focus {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #6f42c1;
+      box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+      color: #ffffff;
+    }
+
+    .form-label {
+      color: #ffffff;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-check-label {
+      color: #cccccc;
+    }
+
+    .form-check-input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .form-check-input:checked {
+      background-color: #6f42c1;
+      border-color: #6f42c1;
+    }
+
+    .btn-register {
+      background: linear-gradient(to right, #6d28d9, #9333ea);
+      border: none;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      width: 100%;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .btn-register:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(111, 66, 193, 0.4);
+    }
+
+    .register-links {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .register-links a {
+      color: #6f42c1;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .register-links a:hover {
+      color: #8b5cf6;
+      text-decoration: underline;
+    }
+
+    .alert {
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .alert-danger {
+      background: rgba(220, 53, 69, 0.2);
+      color: #ff6b6b;
+      border-left: 4px solid #dc3545;
+    }
+
+    .alert-success {
+      background: rgba(25, 135, 84, 0.2);
+      color: #69db7c;
+      border-left: 4px solid #198754;
+    }
+    .password-input-group { position: relative; }
+    .password-toggle { 
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%); 
+      background: none; border: none; color: #9ca3af; cursor: pointer; 
+    }
+    .password-input { padding-right: 45px !important; }
+
+    .password-strength {
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .strength-weak { color: #ff6b6b; }
+    .strength-medium { color: #ffa94d; }
+    .strength-strong { color: #69db7c; }
+  </style>
+</head>
+<body>
+  <div class="bg-dots"></div>
+
+
+  <div class="register-container">
+    <div class="register-card">
+      <div class="register-header">
+        <h2>Create Account</h2>
+        <p>Join Smart Network Planner today</p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" action="{{ url_for('register') }}">
+        <div class="mb-3">
+          <label for="name" class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="name" name="name" required placeholder="Enter your full name">
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email">
+        </div>
+
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <div class="password-input-group">
+              <input type="password" class="form-control password-input" id="password" name="password" required placeholder="Enter your password">
+              <button type="button" class="password-toggle" id="password-toggle">👁️</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="confirm" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="confirm" name="confirm" required placeholder="Confirm your password">
+          <div class="password-strength" id="password-match"></div>
+        </div>
+
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+          <label class="form-check-label" for="terms">
+            I agree to the <a href="#" style="color: #6f42c1;">Terms and Conditions</a>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-register" >Create Account</button>
+      </form>
+
+      <div class="register-links">
+        <p>Already have an account? <a href="{{ url_for('login') }}">Sign In</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('password-toggle').addEventListener('click', function() {
+      const passwordInput = document.getElementById('password');
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      this.textContent = isPassword ? '🙈' : '👁️';
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      const password = document.getElementById('password');
+      const confirm = document.getElementById('confirm');
+      const strengthText = document.getElementById('password-strength');
+      const matchText = document.getElementById('password-match');
+
+      function checkPasswordStrength(pwd) {
+        if (pwd.length === 0) {
+          strengthText.textContent = '';
+          strengthText.className = 'password-strength';
+          return;
+        }
+
+        if (pwd.length < 6) {
+          strengthText.textContent = 'Too short (min 6 characters)';
+          strengthText.className = 'password-strength strength-weak';
+        } else if (pwd.length < 8) {
+          strengthText.textContent = 'Medium strength';
+          strengthText.className = 'password-strength strength-medium';
+        } else {
+          strengthText.textContent = 'Strong password';
+          strengthText.className = 'password-strength strength-strong';
+        }
+      }
+
+      function checkPasswordMatch() {
+        if (confirm.value.length === 0) {
+          matchText.textContent = '';
+          matchText.className = 'password-strength';
+          return;
+        }
+
+        if (password.value === confirm.value) {
+          matchText.textContent = 'Passwords match';
+          matchText.className = 'password-strength strength-strong';
+        } else {
+          matchText.textContent = 'Passwords do not match';
+          matchText.className = 'password-strength strength-weak';
+        }
+      }
+
+      password.addEventListener('input', function() {
+        checkPasswordStrength(this.value);
+        checkPasswordMatch();
+      });
+
+      confirm.addEventListener('input', checkPasswordMatch);
+    });
+  </script>
+</body>
+</html>

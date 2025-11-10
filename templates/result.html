@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Planner Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    
+    body {
+    background-color: #0f0f1b;
+    background-image: 
+        radial-gradient(rgba(147, 51, 234, 0.1) 1px, transparent 1px),
+        radial-gradient(rgba(109, 40, 217, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px, 60px 60px;
+    background-position: 0 0, 15px 15px;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    position: relative;
+}
+
+/* Enhanced background overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(15, 15, 27, 0.9) 0%, rgba(26, 26, 46, 0.8) 100%);
+    z-index: -1;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Enhanced glass buttons */
+.btn-glass {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    color: #ffffff;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 500;
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+}
+
+.btn-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 14px 28px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-gradient:hover::before {
+    left: 100%;
+}
+
+.btn-gradient:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+/* Enhanced cards */
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.card-header {
+    background: rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 16px 16px 0 0 !important;
+}
+
+.card-title {
+    color: #ffffff;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Enhanced image containers */
+.image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.image-container:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    transition: transform 0.5s ease;
+    display: block;
+}
+
+.image-container:hover img {
+    transform: scale(1.03);
+}
+
+.image-label {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(15, 15, 27, 0.9);
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced suggestion box */
+.suggestion-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    min-height: 150px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.suggestion-box:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced chat interface */
+.chat-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    max-height: 400px;
+    overflow-y: auto;
+    backdrop-filter: blur(20px);
+}
+
+.chat-input {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+}
+
+.chat-input:focus {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    color: #ffffff;
+}
+
+.chat-input::placeholder {
+    color: #9ca3af;
+}
+
+/* WhatsApp-style chat messages */
+.chat-message {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 18px;
+    max-width: 70%;
+    position: relative;
+    clear: both;
+    animation: messageSlide 0.3s ease-out;
+}
+
+.user-message {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin-left: auto;
+    margin-right: 0;
+    float: right;
+    max-width: 65%;
+    border-bottom-right-radius: 4px;
+}
+
+.ai-message {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.2));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-left: 0;
+    margin-right: auto;
+    float: left;
+    max-width: 75%;
+    border-bottom-left-radius: 4px;
+}
+
+@keyframes messageSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced loading spinner */
+#loading-spinner {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: rgba(15, 15, 27, 0.9);
+    padding: 2rem;
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(139, 92, 246, 0.3);
+    border-left: 4px solid #8b5cf6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Enhanced error and warning messages */
+.error-message {
+    color: #ff6b6b;
+    background: rgba(220, 53, 69, 0.1);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #dc3545;
+    margin: 1rem 0;
+}
+
+.warning-message {
+    color: #ffd43b;
+    background: rgba(255, 193, 7, 0.1);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #ffc107;
+    margin: 1rem 0;
+}
+
+/* 3D Preview container */
+#preview3d-container {
+    display: none;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+/* Grid layout improvements */
+.row {
+    margin-bottom: 2rem;
+}
+
+.col-md-6, .col-lg-4, .col-lg-6 {
+    margin-bottom: 1.5rem;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+h1 {
+    background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.5rem;
+}
+
+/* Text colors */
+.text-muted {
+    color: #9ca3af !important;
+}
+
+/* Badges and labels */
+.badge {
+    background: rgba(139, 92, 246, 0.2);
+    color: #d8b4fe;
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 500;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .container {
+        margin-top: 1rem;
+        padding: 0 1rem;
+    }
+    
+    .chat-message {
+        max-width: 85%;
+    }
+    
+    .user-message {
+        max-width: 80%;
+    }
+    
+    .ai-message {
+        max-width: 85%;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Scrollbar styling */
+.chat-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.5);
+    border-radius: 3px;
+}
+
+.chat-box::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.7);
+}
+
+/* AI Analysis section */
+.ai-analysis {
+    background: rgba(139, 92, 246, 0.05);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.ai-analysis h4 {
+    color: #8b5cf6;
+    margin-bottom: 1rem;
+}
+
+/* Action buttons container */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+}
+
+/* Clear floats for chat */
+.chat-box::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+/* WhatsApp-style Chat Container */
+.chat-container {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 0;
+    margin-top: 30px;
+    max-height: 600px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.chat-header {
+    background: rgba(111, 66, 193, 0.2);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6d28d9, #9333ea);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: white;
+}
+
+.chat-title {
+    flex: 1;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.chat-status {
+    font-size: 0.8rem;
+    color: #10b981;
+}
+
+.chat-log {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    scroll-behavior: smooth;
+}
+
+.chat-log::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-log::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-log::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.chat-message {
+    max-width: 75%;
+    padding: 8px 12px;
+    border-radius: 18px;
+    position: relative;
+    animation: messageSlide 0.3s ease-out;
+    word-wrap: break-word;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.user-message {
+    align-self: flex-end;
+    background: #667eea;
+    color: white;
+    border-bottom-right-radius: 4px;
+    margin-left: 20%;
+}
+
+.ai-message {
+    align-self: flex-start;
+    background: rgba(139, 92, 246, 0.15);
+    color: #e2e8f0;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-bottom-left-radius: 4px;
+    margin-right: 20%;
+}
+
+.message-tail {
+    position: absolute;
+    bottom: 0;
+    width: 12px;
+    height: 12px;
+}
+
+.user-message .message-tail {
+    right: -6px;
+    background: radial-gradient(circle at 0 0, transparent 50%, #667eea 50%);
+}
+
+.ai-message .message-tail {
+    left: -6px;
+    background: radial-gradient(circle at 100% 0, transparent 50%, rgba(139, 92, 246, 0.15) 50%);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-left: none;
+    border-bottom: none;
+}
+
+.message-content {
+    white-space: pre-wrap;
+}
+
+.message-time {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    margin-top: 4px;
+    text-align: right;
+}
+
+.user-message .message-time {
+    color: #e2e8f0;
+}
+
+.ai-message .message-time {
+    color: #94a3b8;
+}
+
+.chat-input-container {
+    display: flex;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 8px;
+}
+
+.chat-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 25px;
+    padding: 12px 16px;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.chat-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6d28d9, #9333ea);
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+}
+
+.send-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(111, 66, 193, 0.4);
+}
+
+.send-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    align-self: flex-start;
+    margin: 4px 0;
+}
+
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #94a3b8;
+    display: inline-block;
+    animation: typingBounce 1.2s infinite;
+}
+
+.typing-dots span:nth-child(1) { animation-delay: 0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+@keyframes messageSlide {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.copy-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    margin-left: 8px;
+}
+
+.copy-btn:hover { opacity: 1; }
+.copy-btn.copied { color: #10b981; }
+
+</style>
+</head>
+<body class="bg-dots">
+    <div class="container">
+        <h1 class="text-center mb-4">Network Planner Results</h1>
+        
+        <!-- Error message display -->
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card p-3">
+                    <h3 class="text-light mb-3">Router Placement</h3>
+                    <div class="image-container">
+                        {% if router_img %}
+                            <img src="{{ url_for('uploaded_file', filename=router_img) }}" alt="Router Placement" onerror="this.style.display='none'; document.getElementById('router-fallback').style.display='block';">
+                        {% endif %}
+                        <div id="router-fallback" style="display: none; text-align: center; padding: 2rem; color: #ccc;">
+                            <p>Router placement image not available</p>
+                        </div>
+                
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card p-3">
+                    <h3 class="text-light mb-3">Signal Heatmap</h3>
+                    <div class="image-container">
+                        {% if coverage_img %}
+                            <img src="{{ url_for('uploaded_file', filename=coverage_img) }}" alt="Signal Heatmap" onerror="this.style.display='none'; document.getElementById('coverage-fallback').style.display='block';">
+                        {% endif %}
+                        <div id="coverage-fallback" style="display: none; text-align: center; padding: 2rem; color: #ccc;">
+                            <p>Signal heatmap not available</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card p-3">
+                    <h3 class="text-light mb-3">3D Blueprint View</h3>
+                    <button id="toggle-3d" class="btn btn-glass mb-3">Show 3D View</button>
+                    <button id="retry-3d" class="btn btn-glass mb-3" style="display: none;">Retry 3D View</button>
+                    <div class="image-container position-relative" id="preview3d-container">
+                        <div id="loading-spinner" class="spinner-border text-light" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <img id="preview3d-img" src="" alt="3D Blueprint View">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card p-3">
+                    <h3 class="text-light mb-3">AI Suggestion</h3>
+                    <div class="suggestion-box">
+                        <p class="chat-message ai-message"><strong>AI:</strong> <span id="ai-suggestion"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        <!-- WhatsApp-style Chat Container -->
+        <div class="chat-container w-100" style="max-width: 100%; margin-top: 30px;">
+            <div class="chat-header">
+                <div class="chat-avatar">AI</div>
+                <div>
+                    <h6 class="chat-title mb-0">AI Network Architect</h6>
+                    <small class="chat-status">Online</small>
+                </div>
+            </div>
+
+            <div id="chat-log" class="chat-log">
+                <div class="chat-message ai-message">
+                    <div class="message-content">Welcome! I can help you analyze these network planning results. Ask me about router placement, signal coverage, or any network optimization questions.</div>
+                    <div class="message-time">Just now</div>
+                    <div class="message-tail"></div>
+                </div>
+            </div>
+
+            <form id="chat-form" class="chat-input-container">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Ask about these results..." autocomplete="off">
+                <button type="submit" class="send-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22,2 15,22 11,13 2,9"></polygon>
+                    </svg>
+                </button>
+            </form>
+        </div>
+        <div class="text-center mb-4">
+            <button id="like-btn" class="btn btn-glass me-2">Like</button>
+            <button id="dislike-btn" class="btn btn-glass me-2">Dislike</button>
+            <a href="{{ url_for('download_pdf', config_key=config_key) if config_key else '#' }}" class="btn btn-gradient {% if not config_key %}disabled{% endif %}">Download PDF</a>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Image error handling
+    const routerImg = document.querySelector('img[alt="Router Placement"]');
+    const coverageImg = document.querySelector('img[alt="Signal Heatmap"]');
+    
+    if (routerImg) {
+        routerImg.onerror = function() {
+            this.style.display = 'none';
+            document.getElementById('router-fallback').style.display = 'block';
+        };
+    }
+    
+    if (coverageImg) {
+        coverageImg.onerror = function() {
+            this.style.display = 'none';
+            document.getElementById('coverage-fallback').style.display = 'block';
+        };
+    }
+    
+    // Stream AI Suggestion with improved error handling
+    const suggestionSpan = document.getElementById('ai-suggestion');
+    const configKey = '{{ config_key | default("") | safe }}'.trim();
+
+    if (configKey && configKey !== '') {
+        streamSuggestion(configKey);
+    } else {
+        console.error('No valid config_key provided for suggestion streaming');
+        if (suggestionSpan) {
+            suggestionSpan.innerHTML = '<span class="error-message">Error: No configuration available for AI suggestions.</span>';
+        }
+    }
+
+    function streamSuggestion(configKey) {
+        try {
+            console.log(`Initiating EventSource for AI suggestion with config_key: "${configKey}"`);
+            const suggestionSource = new EventSource('/ai/stream-suggestion?config_key=' + encodeURIComponent(configKey));
+            let suggestionText = '';
+            
+            suggestionSource.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    
+                    if (data.done) {
+                        console.log('Suggestion stream complete');
+                        suggestionSource.close();
+                        return;
+                    }
+                    
+                    if (data.error) {
+                        console.error('Server error for suggestion:', data.error);
+                        if (suggestionSpan) {
+                            suggestionSpan.innerHTML = `<span class="error-message">${escapeHtml(data.error)}</span>`;
+                        }
+                        suggestionSource.close();
+                        return;
+                    }
+                    
+                    if (data.chunk) {
+                        suggestionText += data.chunk;
+                        if (suggestionSpan) {
+                            suggestionSpan.innerHTML = escapeHtml(suggestionText).replace(/\n/g, '<br>');
+                        }
+                        
+                        // Auto-scroll to show latest content
+                        const suggestionBox = document.querySelector('.suggestion-box');
+                        if (suggestionBox) {
+                            suggestionBox.scrollTop = suggestionBox.scrollHeight;
+                        }
+                    }
+                    
+                } catch (err) {
+                    console.error('Error parsing SSE event for suggestion:', err, 'Data:', event.data);
+                    if (suggestionSpan) {
+                        suggestionSpan.innerHTML = `<span class="error-message">Error: Failed to parse AI suggestion.</span>`;
+                    }
+                    suggestionSource.close();
+                }
+            };
+
+            suggestionSource.onerror = function(event) {
+                console.error('EventSource error for suggestion:', event);
+                if (suggestionSource.readyState === EventSource.CLOSED) {
+                    if (suggestionSpan && !suggestionText) {
+                        suggestionSpan.innerHTML = '<span class="error-message">Connection to AI service was closed. Please refresh and try again.</span>';
+                    }
+                } else if (!suggestionText) {
+                    if (suggestionSpan) {
+                        suggestionSpan.innerHTML = '<span class="error-message">Error: Unable to stream AI suggestion. Check server status or try again.</span>';
+                    }
+                }
+                suggestionSource.close();
+            };
+        } catch (error) {
+            console.error('Error initiating EventSource for suggestion:', error);
+            if (suggestionSpan) {
+                suggestionSpan.innerHTML = `<span class="error-message">Error: Unable to connect to AI service.</span>`;
+            }
+        }
+    }
+
+    // 3D View Handling
+    const toggle3dBtn = document.getElementById('toggle-3d');
+    const retry3dBtn = document.getElementById('retry-3d');
+    const preview3dContainer = document.getElementById('preview3d-container');
+    const preview3dImg = document.getElementById('preview3d-img');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    let is3dVisible = false;
+
+    async function load3dView() {
+    if (!loadingSpinner) return;
+    
+    loadingSpinner.style.display = 'block';
+    if (retry3dBtn) retry3dBtn.style.display = 'none';
+    
+    const blueprintFilename = '{{ blueprint_filename | default("") | safe }}';
+    console.log("Fetching 3D view for filename:", blueprintFilename);
+
+    try {
+        const response = await fetch('/ai/render-3d', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: blueprintFilename })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+            throw new Error(errorData.error || `HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        if (preview3dImg) {
+            preview3dImg.src = '/static/uploads/' + data.preview_img + '?t=' + new Date().getTime();
+            preview3dImg.onerror = function() {
+                console.error('Failed to load 3D preview image');
+                if (retry3dBtn) retry3dBtn.style.display = 'inline-block';
+            };
+        }
+        
+        if (preview3dContainer) {
+            preview3dContainer.style.display = 'block';
+        }
+        
+        if (toggle3dBtn) {
+            toggle3dBtn.textContent = 'Hide 3D View';
+        }
+        
+        is3dVisible = true;
+        
+    } catch (error) {
+        console.error('Error loading 3D view:', error);
+        let errorMessage = error.message || 'Unknown error occurred';
+        
+        // Provide user-friendly error messages
+        if (errorMessage.includes('Connection reset') || errorMessage.includes('Failed to fetch')) {
+            errorMessage = 'Network error loading 3D view. Please check your connection and try again.';
+        } else if (errorMessage.includes('file not found')) {
+            errorMessage = 'Blueprint file not found. Please upload the image again.';
+        }
+        
+        alert('Error rendering 3D view: ' + errorMessage);
+        if (retry3dBtn) retry3dBtn.style.display = 'inline-block';
+        
+    } finally {
+        if (loadingSpinner) loadingSpinner.style.display = 'none';
+    }
+}
+
+    if (toggle3dBtn) {
+        toggle3dBtn.addEventListener('click', function() {
+            if (!is3dVisible) {
+                load3dView();
+            } else {
+                if (preview3dContainer) preview3dContainer.style.display = 'none';
+                if (toggle3dBtn) toggle3dBtn.textContent = 'Show 3D View';
+                is3dVisible = false;
+            }
+        });
+    }
+
+    if (retry3dBtn) {
+        retry3dBtn.addEventListener('click', load3dView);
+    }
+
+    // Enhanced Chat Handling with better error handling
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-input');
+const chatLog = document.getElementById('chat-log');
+let responseCount = 0;
+
+if (chatForm && chatInput && chatLog) {
+    chatForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // Add user message to chat
+        addMessageToChat('user', message);
+        chatInput.value = '';
+        chatInput.disabled = true;
+
+        // Create AI response placeholder
+        responseCount++;
+        const aiMessageId = `ai-response-${responseCount}`;
+        addMessageToChat('ai', '', aiMessageId);
+        
+        try {
+            // Stream AI response
+            await streamAIResponse(message, aiMessageId);
+        } catch (error) {
+            console.error('Chat error:', error);
+            const responseElement = document.getElementById(aiMessageId);
+            if (responseElement) {
+                responseElement.innerHTML = '<span class="error-message">Failed to get AI response. Please try again.</span>';
+            }
+        } finally {
+            chatInput.disabled = false;
+            chatInput.focus();
+        }
+    });
+}
+
+async function streamAIResponse(message, messageId) {
+    const responseElement = document.getElementById(messageId);
+    if (!responseElement) return;
+
+    // Show typing indicator
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'typing-indicator';
+    typingIndicator.innerHTML = `
+        <span>AI is thinking</span>
+        <div class="typing-dots">
+            <span></span><span></span><span></span>
+        </div>
+    `;
+    chatLog.appendChild(typingIndicator);
+    chatLog.scrollTop = chatLog.scrollHeight;
+
+    try {
+        // Include config_key in the request for context
+        const configKey = '{{ config_key | default("") | safe }}'.trim();
+        const params = new URLSearchParams({
+            message: message,
+            messageId: messageId,
+            config_key: configKey
+        });
+
+        console.log('Starting AI chat stream with params:', params.toString());
+
+        const eventSource = new EventSource(`/ai/chat-stream?${params.toString()}`);
+        let fullResponse = '';
+
+        await new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+                eventSource.close();
+                reject(new Error('Request timeout - AI service not responding'));
+            }, 300000); // 300 second timeout
+
+            eventSource.onmessage = function(event) {
+                try {
+                    clearTimeout(timeout); // Reset timeout on each message
+
+                    const data = JSON.parse(event.data);
+                    console.log('Received SSE data:', data);
+
+                    if (data.error) {
+                        handleAIError(data.error, responseElement);
+                        eventSource.close();
+                        reject(new Error(data.error));
+                        return;
+                    }
+                    
+                    if (data.done) {
+                        eventSource.close();
+                        resolve();
+                        return;
+                    }
+                    
+                    if (data.chunk) {
+                        fullResponse += data.chunk;
+                        responseElement.innerHTML = escapeHtml(fullResponse).replace(/\n/g, '<br>');
+                        chatLog.scrollTop = chatLog.scrollHeight;
+                    }
+                    
+                } catch (err) {
+                    console.error('Error parsing SSE event:', err, 'Raw data:', event.data);
+                    responseElement.innerHTML = '<span class="error-message">Error parsing AI response</span>';
+                    eventSource.close();
+                    clearTimeout(timeout);
+                    reject(err);
+                }
+            };
+
+            eventSource.onerror = function(event) {
+                console.error('EventSource error:', event);
+                clearTimeout(timeout);
+                
+                if (!fullResponse) {
+                    if (eventSource.readyState === EventSource.CONNECTING) {
+                        responseElement.innerHTML = '<span class="error-message">Connecting to AI service...</span>';
+                    } else {
+                        responseElement.innerHTML = '<span class="error-message">Connection lost. Please try again.</span>';
+                        eventSource.close();
+                        reject(new Error('EventSource connection error'));
+                    }
+                } else {
+                    eventSource.close();
+                    resolve(); // Partial response received
+                }
+            };
+
+            // Close previous event source if exists
+            if (window.currentChatEventSource) {
+                window.currentChatEventSource.close();
+            }
+            window.currentChatEventSource = eventSource;
+        });
+
+    } catch (error) {
+        console.error('Error in AI chat stream:', error);
+        if (!responseElement.innerHTML.trim()) {
+            responseElement.innerHTML = `<span class="error-message">Unable to connect to AI service: ${error.message}</span>`;
+        }
+    } finally {
+        // Remove typing indicator
+        if (typingIndicator && typingIndicator.parentNode) {
+            typingIndicator.remove();
+        }
+    }
+}
+
+function handleAIError(error, responseElement) {
+    let userFriendlyMessage = '';
+    
+    if (error.includes('All AI models are currently busy')) {
+        userFriendlyMessage = '🤖 AI services are currently experiencing high demand. Please try again in 30-60 seconds.';
+    } else if (error.includes('Rate limit')) {
+        userFriendlyMessage = '⏳ AI rate limit reached. Please wait a moment and try again.';
+    } else if (error.includes('Unauthorized') || error.includes('Session expired')) {
+        userFriendlyMessage = '🔐 Please refresh the page and log in again to continue.';
+    } else if (error.includes('Network') || error.includes('connection')) {
+        userFriendlyMessage = '🌐 Network connection issue. Please check your internet and try again.';
+    } else {
+        userFriendlyMessage = `❌ Error: ${error}`;
+    }
+    
+    responseElement.innerHTML = escapeHtml(userFriendlyMessage);
+}
+
+function addMessageToChat(type, content, messageId = null) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${type}-message`;
+    
+    const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    if (type === 'user') {
+        messageDiv.innerHTML = `
+            <div class="message-content">${escapeHtml(content)}</div>
+            <div class="message-time">${currentTime}</div>
+            <div class="message-tail"></div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="message-content">${messageId ? `<span id="${messageId}">${escapeHtml(content)}</span>` : escapeHtml(content)}</div>
+            <div class="message-time">${currentTime}</div>
+            <div class="message-tail"></div>
+        `;
+    }
+    
+    chatLog.appendChild(messageDiv);
+    chatLog.scrollTop = chatLog.scrollHeight;
+    
+    return messageDiv;
+}
+
+    function streamAIResponse(message, messageId) {
+        const responseElement = document.getElementById(messageId);
+        if (!responseElement) return;
+
+        try {
+            const eventSource = new EventSource(`/ai/chat-stream?message=${encodeURIComponent(message)}&messageId=${messageId}`);
+            let fullResponse = '';
+
+            eventSource.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    
+                    if (data.error) {
+                        // Handle different error types
+                        if (data.error.includes('All AI models are currently busy')) {
+                            fullResponse = '🤖 AI services are currently experiencing high demand. Please try again in 30-60 seconds.';
+                        } else if (data.error.includes('Rate limit')) {
+                            fullResponse = '⏳ AI rate limit reached. Please wait a moment and try again.';
+                        } else if (data.error.includes('Unauthorized') || data.error.includes('Session expired')) {
+                            fullResponse = '🔐 Please refresh the page and log in again to continue.';
+                        } else {
+                            fullResponse = `❌ Error: ${data.error}`;
+                        }
+                        responseElement.innerHTML = escapeHtml(fullResponse);
+                        eventSource.close();
+                        return;
+                    }
+                    
+                    if (data.done) {
+                        eventSource.close();
+                        return;
+                    }
+                    
+                    if (data.chunk) {
+                        fullResponse += data.chunk;
+                        responseElement.innerHTML = escapeHtml(fullResponse).replace(/\n/g, '<br>');
+                        chatLog.scrollTop = chatLog.scrollHeight;
+                    }
+                    
+                } catch (err) {
+                    console.error('Error parsing SSE event:', err);
+                    responseElement.innerHTML = '<span class="error-message">Error parsing AI response</span>';
+                    eventSource.close();
+                }
+            };
+
+            eventSource.onerror = function() {
+                if (!fullResponse) {
+                    responseElement.innerHTML = '<span class="error-message">Connection error. Please try again.</span>';
+                }
+                eventSource.close();
+            };
+
+            // Close previous event source if exists
+            if (window.currentChatEventSource) {
+                window.currentChatEventSource.close();
+            }
+            window.currentChatEventSource = eventSource;
+
+        } catch (error) {
+            console.error('Error initiating chat EventSource:', error);
+            responseElement.innerHTML = '<span class="error-message">Unable to connect to AI service</span>';
+        }
+    }
+
+    // Utility function for HTML escaping
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // PDF Download Enhancement
+    const pdfDownloadBtn = document.querySelector('a[href*="download-pdf"]');
+    if (pdfDownloadBtn && configKey) {
+        // Ensure the URL has the config_key parameter
+        const currentHref = pdfDownloadBtn.getAttribute('href');
+        if (!currentHref.includes('config_key=')) {
+            pdfDownloadBtn.setAttribute('href', currentHref + (currentHref.includes('?') ? '&' : '?') + 'config_key=' + encodeURIComponent(configKey));
+        }
+        
+        // Add loading state
+        pdfDownloadBtn.addEventListener('click', function(e) {
+            if (!configKey) {
+                e.preventDefault();
+                alert('No configuration data available for PDF download');
+                return;
+            }
+            
+            const originalText = this.innerHTML;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Generating PDF...';
+            this.disabled = true;
+            
+            // Reset after 5 seconds if still loading
+            setTimeout(() => {
+                this.innerHTML = originalText;
+                this.disabled = false;
+            }, 5000);
+        });
+    }
+});
+</script>
+</body>
+</html>
